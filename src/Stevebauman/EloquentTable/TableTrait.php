@@ -23,7 +23,7 @@ trait TableTrait
      *
      * @var array
      */
-    public $eloquentTableColumns = array();
+    public $eloquentTableColumns = [];
 
     /*
      * Stores the columns to hide when using
@@ -31,49 +31,49 @@ trait TableTrait
      *
      * @var array
      */
-    public $eloquentTableHiddenColumns = array();
+    public $eloquentTableHiddenColumns = [];
 
     /*
      * Stores the column modifications
      *
      * @var array
      */
-    public $eloquentTableModifications = array();
+    public $eloquentTableModifications = [];
 
     /*
      * Stores rows modifications
      *
      * @var array
      */
-    public $eloquentTableRowAttributesModifications = array();
+    public $eloquentTableRowAttributesModifications = [];
 
     /*
      * Stores cells modifications
      *
      * @var array
      */
-    public $eloquentTableCellAttributesModifications = array();
+    public $eloquentTableCellAttributesModifications = [];
 
     /*
      * Stores attributes to display onto the table
      *
      * @var array
      */
-    public $eloquentTableAttributes = array();
+    public $eloquentTableAttributes = [];
 
     /*
      * Stores column relationship meanings
      *
      * @var array
      */
-    public $eloquentTableMeans = array();
+    public $eloquentTableMeans = [];
 
     /*
      * Stores column names to apply sorting
      *
      * @var array
      */
-    public $eloquentTableSort = array();
+    public $eloquentTableSort = [];
 
     /*
      * Enables / disables showing the pages on the table if the collection
@@ -90,7 +90,7 @@ trait TableTrait
      *
      * @return $this
      */
-    public function columns(array $columns = array())
+    public function columns(array $columns = [])
     {
         $this->eloquentTableColumns = array_merge($this->eloquentTableColumns, $columns);
 
@@ -104,7 +104,7 @@ trait TableTrait
      *
      * @return $this
      */
-    public function removeColumns(array $columns = array())
+    public function removeColumns(array $columns = [])
     {
         if ($columns) {
             foreach ($columns as $column) {
@@ -124,7 +124,7 @@ trait TableTrait
      *
      * @return $this
      */
-    public function onlyColumns(array $columns = array())
+    public function onlyColumns(array $columns = [])
     {
         if ($columns) {
             $this->eloquentTableColumns = array_intersect_key($this->eloquentTableColumns, array_flip($columns));
@@ -141,7 +141,7 @@ trait TableTrait
      *
      * @return $this
      */
-    public function hidden(array $columns = array())
+    public function hidden(array $columns = [])
     {
         $this->eloquentTableHiddenColumns = $columns;
 
@@ -167,9 +167,9 @@ trait TableTrait
      *
      * @return $this
      */
-    public function attributes(array $attributes = array())
+    public function attributes(array $attributes = [])
     {
-        $this->eloquentTableAttributes = $this->arrayToHtmlAttributes($attributes);
+        $this->eloquentTableAttributes = $attributes;
 
         return $this;
     }
@@ -195,8 +195,8 @@ trait TableTrait
          * separator to see what laravel version we're using so the
          * correct blade tags are used.
          */
-        if (!$view) {
-            if (!($view = Config::get('eloquenttable' . EloquentTableServiceProvider::$configSeparator . 'default_render_view'))) {
+        if (! $view) {
+            if (! ($view = Config::get('eloquenttable' . EloquentTableServiceProvider::$configSeparator . 'default_render_view'))) {
                 if (EloquentTableServiceProvider::$configSeparator === '::') {
                     $view = 'eloquenttable::laravel-4-table';
                 } else {
@@ -220,11 +220,11 @@ trait TableTrait
      */
     public function modify($columns, Closure $closure = null)
     {
-
         if (is_array($columns)) {
             foreach ($columns as $column => $closure) {
                 $this->modify($column, $closure);
             }
+
             return $this;
         }
 
@@ -273,7 +273,7 @@ trait TableTrait
      */
     public function getCellAttributes($column, $record = null)
     {
-        $attributes = array();
+        $attributes = [];
         if (array_key_exists($column, $this->eloquentTableCellAttributesModifications)) {
             $attributes = call_user_func($this->eloquentTableCellAttributesModifications[$column], $record);
             if (array_key_exists($column, $this->eloquentTableHiddenColumns)) {
@@ -300,7 +300,7 @@ trait TableTrait
      */
     public function getRowAttributes($record)
     {
-        $attributes = array();
+        $attributes = [];
         foreach ($this->eloquentTableRowAttributesModifications as $closure) {
             $tmpAtrributes = call_user_func($closure, $record);
             if (is_array($tmpAtrributes)) {
@@ -318,7 +318,7 @@ trait TableTrait
      *
      * @return $this
      */
-    public function sortable($columns = array())
+    public function sortable($columns = [])
     {
         $this->eloquentTableSort = $columns;
 
@@ -465,7 +465,7 @@ trait TableTrait
      *
      * @return TableCollection
      */
-    public function newCollection(array $models = array())
+    public function newCollection(array $models = [])
     {
         return new TableCollection($models);
     }
@@ -477,7 +477,7 @@ trait TableTrait
      *
      * @return string
      */
-    private function arrayToHtmlAttributes(array $attributes = array())
+    private function arrayToHtmlAttributes(array $attributes = [])
     {
         $attributeString = '';
 
