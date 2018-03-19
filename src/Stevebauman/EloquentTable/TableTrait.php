@@ -75,6 +75,8 @@ trait TableTrait
      */
     public $eloquentTableSort = [];
 
+    public $eloquentMassAction = true;
+
     /*
      * Enables / disables showing the pages on the table if the collection
      * is paginated
@@ -82,6 +84,49 @@ trait TableTrait
      * @var bool
      */
     public $eloquentTablePages = false;
+
+    public function withMassActions(Closure $closure = null, $value = 'id')
+    {
+        $closure = $closure();
+
+        if (! $closure) {
+            return $this;
+        }
+
+        if ($closure) {
+            $closure = '
+            <div class="custom-table custom-table__mass-actions">
+                <input type="checkbox" data-mass-action="all">
+
+                <div class="actions">
+                    <i class="glyphicon glyphicon-chevron-down"></i>
+                    <div class="actions__items">
+                        ' . implode(PHP_EOL, $closure()) . '
+                    </div>
+                </div>
+            </div>';
+        }
+
+        $this->eloquentTableColumns = [
+            'select' => [
+                'content' => $closure,
+                'class'   => 'select',
+            ],
+        ] + $this->eloquentTableColumns;
+
+        $this->modify('select', function ($item) use ($value) {
+            return '<input type="checkbox" data-mass-action="' . ($item[$value] ?? null) . '">';
+        });
+
+        $this->modifyCell('select', function () {
+            return [
+                'class'          => 'text-center',
+                'data-mass-cell' => null,
+            ];
+        });
+
+        return $this;
+    }
 
     /**
      * Assigns columns to display.
