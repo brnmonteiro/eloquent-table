@@ -101,7 +101,7 @@ trait TableTrait
                 <div class="actions">
                     <i class="glyphicon glyphicon-chevron-down"></i>
                     <div class="actions__items">
-                        ' . implode(PHP_EOL, $closure()) . '
+                        ' . implode(PHP_EOL, $closure) . '
                     </div>
                 </div>
             </div>';
