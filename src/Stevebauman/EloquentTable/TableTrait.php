@@ -115,7 +115,19 @@ trait TableTrait
         ] + $this->eloquentTableColumns;
 
         $this->modify('select', function ($item) use ($value) {
-            return '<input type="checkbox" data-mass-action="' . ($item[$value] ?? ($item['id'] ?? null)) . '">';
+            if (isset($item[$value])) {
+                if (is_array($item[$value])) {
+                    $values = implode(',', $item[$value]);
+                } else {
+                    $values = $item[$value];
+                }
+            } elseif (isset($item['id'])) {
+                $values = $item['id'];
+            } else {
+                $values = null;
+            }
+
+            return '<input type="checkbox" data-mass-action="' . $values . '">';
         });
 
         $this->modifyCell('select', function () {
