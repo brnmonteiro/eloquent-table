@@ -115,7 +115,7 @@ trait TableTrait
         ] + $this->eloquentTableColumns;
 
         $this->modify('select', function ($item) use ($value) {
-            return '<input type="checkbox" data-mass-action="' . ($item[$value] ?? null) . '">';
+            return '<input type="checkbox" data-mass-action="' . ($item[$value] ?? ($item['id'] ?? null)) . '">';
         });
 
         $this->modifyCell('select', function () {
