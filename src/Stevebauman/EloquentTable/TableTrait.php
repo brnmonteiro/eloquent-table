@@ -133,7 +133,7 @@ trait TableTrait
         $this->modifyCell('select', function () {
             return [
                 'class'          => 'text-center',
-                'data-mass-cell' => null,
+                'cell-checkbox'  => null,
             ];
         });
 
